@@ -94,7 +94,7 @@ class MightyRos2Publisher(Node):
             if res.get("ok"):
                 self.get_logger().info("start_vio accepted")
             else:
-                self.get_logger().warn(f"start_vio failed: {res.get('message', '')}")
+                self.get_logger().warning(f"start_vio failed: {res.get('message', '')}")
 
     def close(self):
         with self._shutdown_lock:
@@ -106,10 +106,10 @@ class MightyRos2Publisher(Node):
             try:
                 res = self.client.stop_vio()
                 if not res.get("ok"):
-                    self.get_logger().warn(f"stop_vio failed: {res.get('message', '')}")
+                    self.get_logger().warning(f"stop_vio failed: {res.get('message', '')}")
             except BaseException as exc:
                 try:
-                    self.get_logger().warn(f"stop_vio exception: {exc}")
+                    self.get_logger().warning(f"stop_vio exception: {exc}")
                 except BaseException:
                     pass
 
@@ -117,7 +117,7 @@ class MightyRos2Publisher(Node):
             self.client.disconnect()
         except BaseException as exc:
             try:
-                self.get_logger().warn(f"disconnect exception: {exc}")
+                self.get_logger().warning(f"disconnect exception: {exc}")
             except BaseException:
                 pass
 
@@ -188,7 +188,7 @@ class MightyRos2Publisher(Node):
         try:
             image = image_to_raw(image, jpeg_output_format="gray8")
         except (RuntimeError, ValueError) as exc:
-            self.get_logger().warn(f"image decode failed: {exc}")
+            self.get_logger().warning(f"image decode failed: {exc}")
             return
         if not image:
             return
@@ -221,7 +221,7 @@ class MightyRos2Publisher(Node):
         self.vio_state_pub.publish(msg)
 
     def _on_error(self, error: Dict[str, Any]):
-        self.get_logger().warn(
+        self.get_logger().warning(
             f"sdk error scope={error.get('scope')} code={error.get('code')} message={error.get('message')}"
         )
 
